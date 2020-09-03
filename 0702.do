@@ -574,23 +574,6 @@ ridgereg l_y l_rate l_tot_pp l_spay sex marriage econ disability preg cat2 cat3 
 edu2 edu3 edu4 edu5 edu6 age3 age4 age5 sj2 sj3 sj4 sj5 if age!=1&ins1>=1&ins2==0&ins3==0, model(orr)
 
 *****************************************************************************
-* 상급병실 t-test
-/*
-keep if age!=1&ins1>=1&ins2==0&ins3==0
-
-ttest s_pay, by(room)
-ttest rate, by(room)
-ttest total_pp, by(room)
-
-ttest s_pay, by(room_1)
-ttest rate, by(room_1)
-ttest total_pp, by(room_1)
-
-ttest s_pay, by(room_special)
-ttest rate, by(room_special)
-ttest total_pp, by(room_special)
-*/
-*****************************************************************************
 *****************************************************************************
 * EXPORT
 /*
@@ -619,43 +602,3 @@ eststo m1
 xml_tab *, star(* 0.1 ** 0.05 *** 0.01) ///
 save(02_ridge.xml) sheet(Table1) ///
 replace below nolabel 
-
-
-*****************************************************************************
-/* past
-gen ind_ou = ou_tot / oucount
-gen ind_in = in_tot / in9
-gen l_ou = log(ind_ou)
-gen l_in = log(ind_in)
-
-xtgee oucount l_ou l_tot_pp sex marriage econ chronic disability preg i.edu i.region real_age real_age2 i.sj /// 
-if age!=1&ins1>=1&ins2==0&ins3==0, family(nb) link(log) //rate x/y coinsurance rate (소득, 가격 탄력성 같이)
-
-xtgee in9 l_in l_tot_pp sex marriage i.job econ chronic disability preg i.edu i.region real_age real_age2 i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0, family(nb) link(log) //rate x/y coinsurance rate (소득, 가격 탄력성 같이)
-xtgee l_y l_rate l_tot_pp sex marriage econ chronic disability preg i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp sex marriage econ chronic disability preg i.job i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp sex marriage econ i.cat_cd disability preg i.job i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp sex marriage econ disability preg i.cat_cd i.job i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp sex marriage econ disability preg i.cat_cd i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp s_pay sex marriage econ disability preg i.cat_cd i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtgee l_y l_rate l_tot_pp i.dis4 sex marriage econ disability preg i.cat_cd i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0
-
-xtreg l_y l_rate l_tot_pp sex marriage econ disability preg i.cat_cd i.region i.edu i.age i.sj ///
-if age!=1&ins1>=1&ins2==0&ins3==0, fe
-
-gen cat_region = 0
-replace cat_region = 1 if region==36|region==41|region==42|region==43|region==44|region==45|region==46|region==47|region==48|region==50
