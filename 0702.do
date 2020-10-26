@@ -23,31 +23,7 @@ replace c3=1 if c3==2
 rename c3 sex
 label variable sex "0=M 1=F"
 
-* age dummy (1950~1990)
-gen age1=0
-gen age2=0
-gen age3=0
-gen age4=0
-gen age5=0
-replace age1=1 if c4_0>1990 | c4_0<1950
-replace age2=1 if inrange(c4_0, 1986, 1990)
-replace age3=1 if inrange(c4_0, 1976, 1985)
-replace age4=1 if inrange(c4_0, 1966, 1975)
-replace age5=1 if inrange(c4_0, 1950, 1965)
-label variable age1 "under 20, over 65"
-label variable age2 "20-29"
-label variable age3 "30-39"
-label variable age4 "40-49"
-label variable age5 "50-65"
-gen age = 0
-replace age=1 if age1==1
-replace age=2 if age2==1
-replace age=3 if age3==1
-replace age=4 if age4==1
-replace age=5 if age5==1
-label variable age "1~20+65~ 2-20 3-30 4-40 5-50"
-drop age1 age2 age3 age4 age5
-
+* age
 gen real_age = 2020-c4_0
 gen real_age2 = real_age^2
 drop c4_0
